@@ -1,0 +1,9 @@
+#!/bin/bash
+# for all refs, check which are, and which aren't included in the given object.
+refs=$(git show-ref | cut -d' ' -f2)
+echo "== refs contained within object $1: =="
+git log $1 --decorate=full | grep --color=auto -F "$refs"
+echo "== refs not contained within object $1: =="
+for ref in $refs; do
+	git log $1 --decorate=full | grep -qF "$ref" || echo $ref
+done
